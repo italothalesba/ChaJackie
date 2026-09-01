@@ -86,11 +86,11 @@ export const Header = () => {
           <ul className="text-left font-sans text-brand-brown-dark/90 space-y-4">
             <li className="flex items-center gap-4">
               <div className="bg-brand-sage text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">1</div>
-              <span className="text-sm md:text-base">Escolha seus números da sorte na cartela (R$ 50 cada).</span>
+              <span className="text-sm md:text-base">Escolha seus números da sorte (P: R$ 50 | M: R$ 60 | G: R$ 70).</span>
             </li>
             <li className="flex items-center gap-4">
               <div className="bg-brand-brown text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">2</div>
-              <span className="text-sm md:text-base">Cada número vale um pacote de fralda + um mimo diário.</span>
+              <span className="text-sm md:text-base">Cada número vale um pacote de fralda + um presente especial.</span>
             </li>
             <li className="flex items-center gap-4">
               <div className="bg-brand-sage-dark text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">3</div>

@@ -16,6 +16,7 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [syncError, setSyncError] = useState<string | null>(null);
 
   // Sync with Google Sheets
   useEffect(() => {
@@ -23,19 +24,40 @@ export default function App() {
   }, []);
 
   const fetchData = async () => {
-    const scriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
+    
     if (!scriptUrl) {
-      console.warn('VITE_GOOGLE_SCRIPT_URL não configurada. Usando dados locais.');
+      console.warn('VITE_GOOGLE_SCRIPT_URL não configurada.');
+      setSyncError('Configuração Pendente: Você ainda não configurou o link da sua planilha do Google.');
       setIsLoading(false);
       return;
     }
 
     try {
-      console.log('Tentando conectar à planilha...');
-      const response = await fetch(scriptUrl, {
-        method: 'GET',
-        redirect: 'follow'
-      });
+      setSyncError(null);
+      
+      const cleanUrl = scriptUrl.trim().replace(/\/$/, '');
+
+      // Validação: Detectar se o usuário colou o link da Planilha em vez do Script
+      if (cleanUrl.includes('docs.google.com/spreadsheets')) {
+        setSyncError('Link Incorreto: Você usou o link da Planilha. No Google Script, vá em Implantar > App da Web e use o link que termina em /exec.');
+        setIsLoading(false);
+        return;
+      }
+      
+      // Validação de segurança: URLs /dev não funcionam para convidados
+      if (cleanUrl.includes('/dev')) {
+        setSyncError('URL de Teste: Você está usando um link /dev. Use o link de "Execução" que termina em /exec para que os convidados consigam ver.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Adicionamos um carimbo de tempo para evitar cache do navegador
+      const urlWithCacheBuster = `${cleanUrl}${cleanUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
+      
+      const response = await fetch(urlWithCacheBuster);
 
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
@@ -45,7 +67,7 @@ export default function App() {
       
       if (Array.isArray(data)) {
         const updatedNumbers = generateInitialNumbers().map(localNum => {
-          const remoteNum = data.find(d => {
+          const remoteNum = data.find((d: any) => {
             const numPlanilha = d.Numero || d.numero || d.num || d['Número'] || d[Object.keys(d)[0]];
             return Number(numPlanilha) === localNum.numero;
           });
@@ -65,8 +87,14 @@ export default function App() {
         setNumbers(updatedNumbers);
       }
     } catch (error) {
-      console.error('Erro ao buscar dados:', error);
-      // Mostramos um alerta discreto no console e mantemos os dados locais
+      console.warn('Sincronização pendente. Usando dados locais.');
+      // Diagnóstico de Conexão Silencioso
+      const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+      if (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') {
+        setSyncError('Configuração: O link do Google Script ainda não foi adicionado nas configurações do site.');
+      } else {
+        setSyncError('Aviso: O site está operando em modo independente. Para sincronizar com a planilha, verifique se a Versão 4 foi implantada como "Qualquer Pessoa" (Anyone) no Google.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -80,16 +108,29 @@ export default function App() {
 
   const handleConfirm = async (userData: UserData) => {
     setIsSubmitting(true);
-    const scriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
 
     const chosenItems = numbers.filter(n => selectedNumbers.includes(n.numero));
-    const totalValue = selectedNumbers.length * 50;
+    const totalValue = chosenItems.reduce((acc, item) => {
+      if (item.fralda === 'P') return acc + 50;
+      if (item.fralda === 'M') return acc + 60;
+      return acc + 70;
+    }, 0);
 
-    // Payload for Google Sheets
+    // Payload for Google Sheets - Organized to match script expectations
     const payload = {
       action: 'reserve',
-      numeros: selectedNumbers,
-      ...userData
+      detalhes: chosenItems.map(item => ({
+        Numero: item.numero,
+        Fralda: `Fralda ${item.fralda}`,
+        Mimo: item.mimo,
+        Nome: userData.nome,
+        Telefone: userData.telefone,
+        Endereco: userData.endereco,
+        Forma_Pagamento: userData.formaPagamento
+      }))
     };
 
     try {
@@ -105,22 +146,24 @@ export default function App() {
       // Construct WhatsApp message
       const itemsList = chosenItems.map(item => `• Nº ${item.numero} (Fralda ${item.fralda} + ${item.mimo})`).join('\n');
       const paymentMsg = userData.formaPagamento === 'PIX' 
-        ? `*Total:* R$ ${totalValue.toFixed(2)}\nFavor enviar a chave PIX!`
+        ? `Total: R$ ${totalValue.toFixed(2)}\nFavor enviar a chave PIX!`
         : `Vou entregar os itens pessoalmente!`;
 
-      const message = encodeURIComponent(
-        `Olá! Estou reservando os números para o Chá Rifa do *Iroh Thales*!\n\n` +
-        `*Dados:*\n` +
-        `👤 Nome: ${userData.nome}\n` +
-        `📍 Endereço: ${userData.endereco}\n` +
-        `💳 Pagamento: ${userData.formaPagamento}\n\n` +
-        `*Escolhas:*\n${itemsList}\n\n` +
-        `${paymentMsg}`
-      );
+      const message = `Ola! Estou reservando os numeros para o Cha Rifa do Iroh Thales!\n\n` +
+        `Dados:\n` +
+        `Nome: ${userData.nome}\n` +
+        `Endereco: ${userData.endereco}\n` +
+        `Pagamento: ${userData.formaPagamento}\n\n` +
+        `Escolhas:\n${itemsList}\n\n` +
+        `${paymentMsg}`;
 
-      // Open WhatsApp
-      const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '5585999999999';
-      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+      // Open WhatsApp - Using wa.me with window.open in a new tab
+      const whatsappNumber = '5588981112005';
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      
+      // Use window.open with _blank to avoid iframe security blocks (Connection Refused)
+      window.open(whatsappUrl, '_blank');
       
       // Update local state and clear selection
       setNumbers(prev => prev.map(n => 
@@ -128,9 +171,6 @@ export default function App() {
       ));
       setSelectedNumbers([]);
       setIsModalOpen(false);
-      
-      alert('Reserva enviada com sucesso! Você será redirecionado para o WhatsApp.');
-
     } catch (error) {
       console.error('Erro ao enviar reserva:', error);
       alert('Houve um erro ao processar sua reserva. Tente novamente ou entre em contato via WhatsApp.');
@@ -139,9 +179,63 @@ export default function App() {
     }
   };
 
+  const handleOpenScript = () => {
+    const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
+    if (scriptUrl) window.open(scriptUrl, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-brand-bg pb-20">
       <Header />
+      
+      {syncError && (
+        <div className="max-w-4xl mx-auto px-4 mb-4">
+          <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 flex items-start gap-4 text-amber-800 shadow-sm relative overflow-hidden">
+            <div className="bg-amber-100 p-2 rounded-xl flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            </div>
+            <div className="relative z-10 pr-8">
+              <button 
+                onClick={() => setSyncError(null)}
+                className="absolute -top-1 -right-1 p-1.5 hover:bg-amber-100 rounded-lg transition-colors text-amber-900/40 hover:text-amber-900"
+                title="Fechar aviso"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+              <p className="font-bold text-base mb-1">Problema de Sincronização</p>
+              <p className="opacity-90 leading-relaxed text-sm">
+                O Google bloqueou a conexão. Isso acontece quando o Script não está configurado como "Qualquer pessoa" (Anyone).
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button 
+                  onClick={() => fetchData()}
+                  className="bg-amber-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-amber-950 transition-colors"
+                >
+                  Tentar Reconectar
+                </button>
+                <button 
+                  onClick={handleOpenScript}
+                  className="bg-white border border-amber-200 text-amber-900 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-amber-100 transition-colors"
+                >
+                  Testar Link da Planilha
+                </button>
+                <a 
+                  href="#" 
+                  className="text-amber-900 text-xs font-bold hover:underline flex items-center gap-1 pt-1.5"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert('Siga estes passos EXATAMENTE:\n\n1. No Google Sheets: Extensões > Apps Script\n2. Clique em Implantar > Gerenciar Implantações\n3. Clique no Lápis (Editar)\n4. Mude "Quem tem acesso" para "Qualquer Pessoa" (Anyone)\n5. MUITO IMPORTANTE: Em "Configuração", selecione "Nova Versão"\n6. Clique em Implantar\n7. Copie a nova URL e use-a no seu arquivo .env');
+                  }}
+                >
+                  Ver Passo-a-passo →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-20">

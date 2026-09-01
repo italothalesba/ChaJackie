@@ -18,7 +18,11 @@ export const SummaryModal = ({ isOpen, onClose, selectedItems, onConfirm, isSubm
     endereco: '',
   });
 
-  const totalValue = selectedItems.length * 50;
+  const totalValue = selectedItems.reduce((acc, item) => {
+    if (item.fralda === 'P') return acc + 50;
+    if (item.fralda === 'M') return acc + 60;
+    return acc + 70;
+  }, 0);
 
   const handleSubmit = (formaPagamento: UserData['formaPagamento']) => {
     if (!formData.nome || !formData.telefone || !formData.endereco) {
@@ -52,10 +56,11 @@ export const SummaryModal = ({ isOpen, onClose, selectedItems, onConfirm, isSubm
                <Heart className="absolute bottom-10 right-10" size={100} />
             </div>
 
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-4 right-4 z-20">
               <button 
                 onClick={onClose}
-                className="p-2 hover:bg-brand-sage/10 rounded-full transition-colors text-brand-brown-dark"
+                className="p-3 hover:bg-brand-sage/10 rounded-full transition-colors text-brand-brown-dark bg-white/50 backdrop-blur-sm shadow-sm"
+                aria-label="Fechar"
               >
                 <X size={24} />
               </button>
