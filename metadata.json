@@ -1,0 +1,6 @@
+{
+  "name": "Chá Rifa Iroh Thales",
+  "description": "Plataforma para o Chá Rifa do Iroh Thales. Escolha seu número, participe do sorteio e presenteie o bebê!",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
