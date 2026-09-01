@@ -15,6 +15,8 @@ export default function App() {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [syncError, setSyncError] = useState<string | null>(null);
 
@@ -160,17 +162,16 @@ export default function App() {
       // Open WhatsApp - Using wa.me with window.open in a new tab
       const whatsappNumber = '5588981112005';
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
       
-      // Use window.open with _blank to avoid iframe security blocks (Connection Refused)
-      window.open(whatsappUrl, '_blank');
+      setWhatsappUrl(url);
+      setIsSuccess(true);
       
       // Update local state and clear selection
       setNumbers(prev => prev.map(n => 
         selectedNumbers.includes(n.numero) ? { ...n, status: 'Reservado', nome: userData.nome } : n
       ));
       setSelectedNumbers([]);
-      setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao enviar reserva:', error);
       alert('Houve um erro ao processar sua reserva. Tente novamente ou entre em contato via WhatsApp.');
@@ -264,10 +265,15 @@ export default function App() {
 
       <SummaryModal 
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setIsSuccess(false);
+        }}
         selectedItems={numbers.filter(n => selectedNumbers.includes(n.numero))}
         onConfirm={handleConfirm}
         isSubmitting={isSubmitting}
+        isSuccess={isSuccess}
+        whatsappUrl={whatsappUrl}
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
