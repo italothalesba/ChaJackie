@@ -80,13 +80,19 @@ export const Header = () => {
         </p>
         
         <div className="bg-white/40 backdrop-blur-md border-2 border-dashed border-brand-brown/30 rounded-3xl p-8 shadow-sm relative">
-           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-bg px-4 font-serif italic text-brand-brown-dark text-sm">
-             Tabela de Prêmios (1 a 50)
+           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-bg px-4 font-serif italic text-brand-brown-dark text-sm whitespace-nowrap">
+             Escolha seu Presente (1 a 50)
            </div>
           
+          <div className="mb-6 text-center">
+            <p className="text-sm font-sans text-brand-brown-dark/80 leading-relaxed">
+              Você pode escolher trazer o <strong>presente físico</strong> ou contribuir com o <strong>valor sugerido via PIX</strong>.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda P - R$ 50</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão P - R$ 50</h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>01 ao 05:</strong> Fralda P + Kit de pano de boca</li>
                 <li className="flex gap-2"><strong>06 ao 10:</strong> Fralda P + Kit de cueiro</li>
@@ -94,7 +100,7 @@ export const Header = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda M - R$ 60</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão M - R$ 60</h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>11 ao 20:</strong> Fralda M + Lenço umedecido</li>
                 <li className="flex gap-2"><strong>21 ao 25:</strong> Fralda M + Pomada</li>
@@ -103,7 +109,7 @@ export const Header = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda G - R$ 70</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão G - R$ 70</h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>31 ao 50:</strong> Fralda G</li>
               </ul>
