@@ -81,22 +81,45 @@ export const Header = () => {
         
         <div className="bg-white/40 backdrop-blur-md border-2 border-dashed border-brand-brown/30 rounded-3xl p-8 shadow-sm relative">
            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-bg px-4 font-serif italic text-brand-brown-dark text-sm">
-             Instruções da Rifa
+             Tabela de Prêmios (1 a 50)
            </div>
-          <ul className="text-left font-sans text-brand-brown-dark/90 space-y-4">
-            <li className="flex items-center gap-4">
-              <div className="bg-brand-sage text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">1</div>
-              <span className="text-sm md:text-base">Escolha seus números da sorte (P: R$ 50 | M: R$ 60 | G: R$ 70).</span>
-            </li>
-            <li className="flex items-center gap-4">
-              <div className="bg-brand-brown text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">2</div>
-              <span className="text-sm md:text-base">Cada número vale um pacote de fralda + um presente especial.</span>
-            </li>
-            <li className="flex items-center gap-4">
-              <div className="bg-brand-sage-dark text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0 shadow-sm">3</div>
-              <span className="text-sm md:text-base">Confirme seus dados e escolha como prefere presentear.</span>
-            </li>
-          </ul>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div className="space-y-3">
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda P - R$ 50</h3>
+              <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
+                <li className="flex gap-2"><strong>01 ao 05:</strong> Fralda P + Kit de pano de boca</li>
+                <li className="flex gap-2"><strong>06 ao 10:</strong> Fralda P + Kit de cueiro</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda M - R$ 60</h3>
+              <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
+                <li className="flex gap-2"><strong>11 ao 20:</strong> Fralda M + Lenço umedecido</li>
+                <li className="flex gap-2"><strong>21 ao 25:</strong> Fralda M + Pomada</li>
+                <li className="flex gap-2"><strong>26 ao 30:</strong> Fralda M + Mimo</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Fralda G - R$ 70</h3>
+              <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
+                <li className="flex gap-2"><strong>31 ao 50:</strong> Fralda G</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-brand-brown/10 flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2 text-brand-sage-dark font-bold text-sm">
+              <Star size={16} fill="currentColor" />
+              <span>Concorra a um PIX de R$ 150,00!</span>
+              <Star size={16} fill="currentColor" />
+            </div>
+            <p className="text-[10px] text-brand-brown-dark/60 font-sans italic">
+              Cada número reservado dá direito a um bilhete para o sorteio principal.
+            </p>
+          </div>
         </div>
       </motion.div>
     </header>
