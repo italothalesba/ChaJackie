@@ -116,15 +116,21 @@ export const Header = () => {
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-brand-brown/10 flex flex-col items-center gap-2">
+          <div className="mt-6 pt-4 border-t border-brand-brown/10 flex flex-col items-center gap-3">
             <div className="flex items-center gap-2 text-brand-sage-dark font-bold text-sm">
               <Star size={16} fill="currentColor" />
-              <span>Concorra a um PIX de R$ 150,00!</span>
+              <span>Sorteio de R$ 150,00 via PIX!</span>
               <Star size={16} fill="currentColor" />
             </div>
-            <p className="text-[10px] text-brand-brown-dark/60 font-sans italic">
-              Cada número reservado dá direito a um bilhete para o sorteio principal.
-            </p>
+            
+            <div className="flex flex-col items-center gap-1 font-sans text-brand-brown-dark/90">
+              <p className="text-sm font-bold bg-brand-sage/10 px-3 py-1 rounded-full">
+                📅 Data: 10/10 no Instagram <a href="https://instagram.com/_dandharas.m" target="_blank" rel="noopener noreferrer" className="underline hover:text-brand-sage-dark transition-colors">@_dandharas.m</a>
+              </p>
+              <p className="text-[10px] italic text-brand-brown-dark/60">
+                O resultado será divulgado aqui na plataforma no dia do sorteio.
+              </p>
+            </div>
           </div>
         </div>
       </motion.div>
