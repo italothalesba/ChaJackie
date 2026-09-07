@@ -75,7 +75,7 @@ export const Header = () => {
           Iroh Thales
         </h1>
         <p className="font-sans text-brand-brown-dark/80 text-lg mb-8 leading-relaxed">
-          O nosso eterno <span className="text-brand-brown font-bold italic">Jackie Chan</span> está chegando!<br />
+          O nosso amado <span className="text-brand-brown font-bold italic">Jackie Chan</span> está chegando!<br />
           Participe do nosso Chá Rifa e concorra a um <span className="bg-brand-sage/20 px-2 py-0.5 rounded text-brand-sage-dark font-bold">PIX de R$ 150,00</span>.
         </p>
         
@@ -84,15 +84,25 @@ export const Header = () => {
              Escolha seu Presente (1 a 50)
            </div>
           
-          <div className="mb-6 text-center">
-            <p className="text-sm font-sans text-brand-brown-dark/80 leading-relaxed">
-              Você pode escolher trazer o <strong>presente físico</strong> ou contribuir com o <strong>valor sugerido via PIX</strong>.
+          <div className="mb-6 text-center max-w-lg mx-auto">
+            <p className="text-sm font-sans text-brand-brown-dark/80 leading-relaxed bg-brand-sage/5 p-4 rounded-2xl border border-brand-sage/10">
+              Para sua comodidade, você pode escolher <strong className="text-brand-sage-dark">APENAS UMA</strong> das opções abaixo:
+              <br />
+              <span className="block mt-2 font-medium">
+                Trazer a <span className="underline">Fralda + o Mimo</span> físico
+                <br />
+                <span className="text-brand-brown/40 font-bold my-1 block">--- OU ---</span>
+                Contribuir com o <span className="underline">Valor Sugerido</span> via PIX
+              </span>
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão P - R$ 50</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1 flex justify-between items-center">
+                <span>Opção P</span>
+                <span className="text-sm bg-brand-sage/10 px-2 py-0.5 rounded text-brand-brown">R$ 50</span>
+              </h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>01 ao 05:</strong> Fralda P + Kit de pano de boca</li>
                 <li className="flex gap-2"><strong>06 ao 10:</strong> Fralda P + Kit de cueiro</li>
@@ -100,7 +110,10 @@ export const Header = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão M - R$ 60</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1 flex justify-between items-center">
+                <span>Opção M</span>
+                <span className="text-sm bg-brand-sage/10 px-2 py-0.5 rounded text-brand-brown">R$ 60</span>
+              </h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>11 ao 20:</strong> Fralda M + Lenço umedecido</li>
                 <li className="flex gap-2"><strong>21 ao 25:</strong> Fralda M + Pomada</li>
@@ -109,7 +122,10 @@ export const Header = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1">Sugestão G - R$ 70</h3>
+              <h3 className="font-serif font-bold text-brand-sage-dark border-b border-brand-sage/20 pb-1 flex justify-between items-center">
+                <span>Opção G</span>
+                <span className="text-sm bg-brand-sage/10 px-2 py-0.5 rounded text-brand-brown">R$ 70</span>
+              </h3>
               <ul className="text-xs space-y-2 font-sans text-brand-brown-dark/80">
                 <li className="flex gap-2"><strong>31 ao 50:</strong> Fralda G</li>
               </ul>

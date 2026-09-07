@@ -190,26 +190,45 @@ export const SummaryModal = ({
                     </div>
                   </div>
 
-                  {/* Payment Actions */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      disabled={isSubmitting}
-                      onClick={() => handleSubmit('Físico')}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-brand-brown/20 bg-white hover:bg-brand-brown/5 hover:border-brand-brown transition-all group disabled:opacity-50"
-                    >
-                      <ShoppingBag className="text-brand-brown mb-2 group-hover:scale-110 transition-transform" size={24} />
-                      <span className="font-sans font-bold text-brand-brown-dark">Entrega Física</span>
-                      <span className="text-[10px] text-brand-brown-dark/60 font-sans">Levo os itens pessoalmente</span>
-                    </button>
+                      {/* Payment Actions */}
+                  <div className="grid grid-cols-1 gap-4 mb-4">
+                    <div className="text-center text-xs text-brand-brown-dark/50 font-sans italic mb-1 uppercase tracking-widest">
+                      Escolha APENAS UMA forma de confirmar
+                    </div>
                     
                     <button
                       disabled={isSubmitting}
-                      onClick={() => handleSubmit('PIX')}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-brand-sage bg-brand-sage/10 hover:bg-brand-sage hover:text-white transition-all group disabled:opacity-50"
+                      onClick={() => handleSubmit('Físico')}
+                      className="flex items-center gap-4 p-5 rounded-2xl border-2 border-brand-brown/20 bg-white hover:bg-brand-brown/5 hover:border-brand-brown transition-all group disabled:opacity-50 text-left"
                     >
-                      <CreditCard className="text-brand-sage mb-2 group-hover:scale-110 group-hover:text-white transition-all" size={24} />
-                      <span className="font-sans font-bold text-brand-sage-dark group-hover:text-white transition-colors">Pagar via PIX</span>
-                      <span className="text-[10px] text-brand-sage-dark/60 group-hover:text-white/80 font-sans transition-colors">Solicito chave via WhatsApp</span>
+                      <div className="bg-brand-brown/10 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                        <ShoppingBag className="text-brand-brown" size={24} />
+                      </div>
+                      <div>
+                        <span className="block font-sans font-bold text-brand-brown-dark">Vou levar o Presente Físico</span>
+                        <span className="text-[10px] text-brand-brown-dark/60 font-sans">Entregarei a fralda e o mimo pessoalmente</span>
+                      </div>
+                    </button>
+                    
+                    <div className="relative flex items-center justify-center py-2">
+                      <div className="absolute inset-0 flex items-center px-10">
+                        <div className="w-full border-t border-brand-brown/10"></div>
+                      </div>
+                      <span className="relative bg-[#fdfaf6] px-4 font-serif italic text-brand-brown/40 text-sm">OU</span>
+                    </div>
+
+                    <button
+                      disabled={isSubmitting}
+                      onClick={() => handleSubmit('PIX')}
+                      className="flex items-center gap-4 p-5 rounded-2xl border-2 border-brand-sage bg-brand-sage/10 hover:bg-brand-sage hover:text-white transition-all group disabled:opacity-50 text-left"
+                    >
+                      <div className="bg-brand-sage/20 p-3 rounded-xl group-hover:scale-110 group-hover:bg-white/20 transition-all">
+                        <CreditCard className="text-brand-sage group-hover:text-white transition-all" size={24} />
+                      </div>
+                      <div>
+                        <span className="block font-sans font-bold text-brand-sage-dark group-hover:text-white transition-colors">Vou pagar o Valor via PIX</span>
+                        <span className="text-[10px] text-brand-sage-dark/60 group-hover:text-white/80 font-sans transition-colors">O valor sugerido já cobre o presente completo</span>
+                      </div>
                     </button>
                   </div>
                   
