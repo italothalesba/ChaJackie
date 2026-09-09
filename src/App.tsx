@@ -275,7 +275,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.2</p>
+        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.3</p>
       </footer>
     </div>
   );
