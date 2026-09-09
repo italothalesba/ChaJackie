@@ -57,7 +57,9 @@ export default function App() {
         return;
       }
       
-      const response = await fetch(cleanUrl);
+      const response = await fetch(cleanUrl, {
+        credentials: 'omit'
+      });
 
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
@@ -275,7 +277,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.3</p>
+        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.4</p>
       </footer>
     </div>
   );
