@@ -10,6 +10,8 @@ import { SummaryModal } from './components/SummaryModal';
 import { RaffleNumber, UserData } from './types';
 import { generateInitialNumbers } from './utils';
 
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxpFOaCxnqz2HBNHIHM4YqsM-zGnSvOPm5rTRpoOx2e1YYEZI5CA4b2oB0TR2rlf7A/exec';
+
 export default function App() {
   const [numbers, setNumbers] = useState<RaffleNumber[]>(generateInitialNumbers());
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
@@ -27,8 +29,7 @@ export default function App() {
 
   const fetchData = async () => {
     const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
-    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? GAS_URL : envUrl;
     
     if (!scriptUrl) {
       console.warn('VITE_GOOGLE_SCRIPT_URL não configurada.');
@@ -111,8 +112,7 @@ export default function App() {
   const handleConfirm = async (userData: UserData) => {
     setIsSubmitting(true);
     const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
-    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? GAS_URL : envUrl;
 
     const chosenItems = numbers.filter(n => selectedNumbers.includes(n.numero));
     const totalValue = chosenItems.reduce((acc, item) => {
