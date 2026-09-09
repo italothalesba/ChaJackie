@@ -29,11 +29,17 @@ export default function App() {
 
   const fetchData = async () => {
     const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? GAS_URL : envUrl;
+    // Se a envUrl for vazia, for a URL padrão de exemplo ou for a URL antiga conhecida com erro, usamos a GAS_URL
+    const isInvalidEnv = !envUrl || 
+                        envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI' || 
+                        envUrl.includes('AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw');
+    
+    const scriptUrl = isInvalidEnv ? GAS_URL : envUrl;
+    
+    console.log('Tentando conectar com:', scriptUrl);
     
     if (!scriptUrl) {
-      console.warn('VITE_GOOGLE_SCRIPT_URL não configurada.');
-      setSyncError('Configuração Pendente: Você ainda não configurou o link da sua planilha do Google.');
+      setSyncError('Configuração Pendente: O link da sua planilha não foi detectado.');
       setIsLoading(false);
       return;
     }
@@ -91,12 +97,15 @@ export default function App() {
       }
     } catch (error) {
       console.warn('Sincronização pendente. Usando dados locais.');
-      // Diagnóstico de Conexão Silencioso
+      
       const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-      if (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') {
+      const isInvalidEnv = !envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI';
+      const activeUrl = isInvalidEnv ? GAS_URL : envUrl;
+
+      if (isInvalidEnv) {
         setSyncError('Configuração: O link do Google Script ainda não foi adicionado nas configurações do site.');
       } else {
-        setSyncError('Aviso: O site está operando em modo independente. Para sincronizar com a planilha, verifique se a Versão 4 foi implantada como "Qualquer Pessoa" (Anyone) no Google.');
+        setSyncError(`Erro de Conexão: O Google bloqueou a tentativa de acesso. Verifique se a Implantação no Google foi feita como "Qualquer Pessoa" (Anyone). URL tentada: ${activeUrl.substring(0, 40)}...`);
       }
     } finally {
       setIsLoading(false);
@@ -112,7 +121,11 @@ export default function App() {
   const handleConfirm = async (userData: UserData) => {
     setIsSubmitting(true);
     const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? GAS_URL : envUrl;
+    const isInvalidEnv = !envUrl || 
+                        envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI' || 
+                        envUrl.includes('AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw');
+    
+    const scriptUrl = isInvalidEnv ? GAS_URL : envUrl;
 
     const chosenItems = numbers.filter(n => selectedNumbers.includes(n.numero));
     const totalValue = chosenItems.reduce((acc, item) => {
@@ -206,7 +219,7 @@ export default function App() {
               </button>
               <p className="font-bold text-base mb-1">Problema de Sincronização</p>
               <p className="opacity-90 leading-relaxed text-sm">
-                O Google bloqueou a conexão. Isso acontece quando o Script não está configurado como "Qualquer pessoa" (Anyone).
+                {syncError}
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <button 
@@ -276,7 +289,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor por amigos e família</p>
+        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.1</p>
       </footer>
     </div>
   );
