@@ -47,6 +47,7 @@ export default function App() {
     try {
       setSyncError(null);
       
+      const scriptUrl = isInvalidEnv ? GAS_URL : envUrl;
       const cleanUrl = scriptUrl.trim().replace(/\/$/, '');
 
       // Validação: Detectar se o usuário colou o link da Planilha em vez do Script
@@ -56,17 +57,7 @@ export default function App() {
         return;
       }
       
-      // Validação de segurança: URLs /dev não funcionam para convidados
-      if (cleanUrl.includes('/dev')) {
-        setSyncError('URL de Teste: Você está usando um link /dev. Use o link de "Execução" que termina em /exec para que os convidados consigam ver.');
-        setIsLoading(false);
-        return;
-      }
-
-      // Adicionamos um carimbo de tempo para evitar cache do navegador
-      const urlWithCacheBuster = `${cleanUrl}${cleanUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
-      
-      const response = await fetch(urlWithCacheBuster);
+      const response = await fetch(cleanUrl);
 
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
@@ -95,18 +86,13 @@ export default function App() {
         });
         setNumbers(updatedNumbers);
       }
-    } catch (error) {
-      console.warn('Sincronização pendente. Usando dados locais.');
-      
+    } catch (error: any) {
+      console.warn('Erro na sincronização:', error);
       const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
       const isInvalidEnv = !envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI';
       const activeUrl = isInvalidEnv ? GAS_URL : envUrl;
-
-      if (isInvalidEnv) {
-        setSyncError('Configuração: O link do Google Script ainda não foi adicionado nas configurações do site.');
-      } else {
-        setSyncError(`Erro de Conexão: O Google bloqueou a tentativa de acesso. Verifique se a Implantação no Google foi feita como "Qualquer Pessoa" (Anyone). URL tentada: ${activeUrl.substring(0, 40)}...`);
-      }
+      
+      setSyncError(`Falha na Conexão: O site não conseguiu conversar com o Google. Certifique-se de que o Script foi implantado como "Qualquer Pessoa". Detalhe: ${error.message || 'Erro de rede'}`);
     } finally {
       setIsLoading(false);
     }
@@ -289,7 +275,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.1</p>
+        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.2</p>
       </footer>
     </div>
   );
