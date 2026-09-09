@@ -182,8 +182,7 @@ export default function App() {
 
   const handleOpenScript = () => {
     const envUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
-    const defaultUrl = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
-    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? defaultUrl : envUrl;
+    const scriptUrl = (!envUrl || envUrl === 'SUA_URL_DO_GOOGLE_SCRIPT_AQUI') ? GAS_URL : envUrl;
     if (scriptUrl) window.open(scriptUrl, '_blank');
   };
 
