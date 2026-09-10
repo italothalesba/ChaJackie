@@ -14,7 +14,7 @@ async function startServer() {
   // ROTA DE PONTE (PROXY) PARA O GOOGLE SCRIPT
   // Isso resolve o erro de CORS porque o servidor busca os dados, não o navegador.
   app.all('/api/proxy', async (req, res) => {
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwOVwMhqicAVHNUhpJ27UoKi_zQvBPO2lnx8lZC-CpU6mlC04-A-uYoNJLXJVnSwf4aLw/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxpFOaCxnqz2HBNHIHM4YqsM-zGnSvOPm5rTRpoOx2e1YYEZI5CA4b2oB0TR2rlf7A/exec';
     
     try {
       const fetchOptions: any = {
@@ -33,6 +33,14 @@ async function startServer() {
 
       const response = await fetch(GAS_URL, fetchOptions);
       const text = await response.text();
+
+      if (!response.ok) {
+        console.error(`Google retornou erro ${response.status}: ${text}`);
+        return res.status(response.status).json({ 
+          error: 'Erro no Google Script', 
+          details: text.substring(0, 200) 
+        });
+      }
 
       try {
         const data = JSON.parse(text);

@@ -50,7 +50,8 @@ export default function App() {
       const response = await fetch('/api/proxy');
 
       if (!response.ok) {
-        throw new Error(`Erro no Servidor: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erro no Servidor: ${response.status}`);
       }
 
       const data = await response.json();
@@ -262,7 +263,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v3.2 (Ponte Ativa)</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v3.5 (Conexão Ativa)</p>
       </footer>
     </div>
   );
