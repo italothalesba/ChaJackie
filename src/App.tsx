@@ -47,22 +47,10 @@ export default function App() {
     try {
       setSyncError(null);
       
-      const scriptUrl = isInvalidEnv ? GAS_URL : envUrl;
-      const cleanUrl = scriptUrl.trim().replace(/\/$/, '');
-
-      // Validação: Detectar se o usuário colou o link da Planilha em vez do Script
-      if (cleanUrl.includes('docs.google.com/spreadsheets')) {
-        setSyncError('Link Incorreto: Você usou o link da Planilha. No Google Script, vá em Implantar > App da Web e use o link que termina em /exec.');
-        setIsLoading(false);
-        return;
-      }
-      
-      const response = await fetch(cleanUrl, {
-        credentials: 'omit'
-      });
+      const response = await fetch('/api/proxy');
 
       if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+        throw new Error(`Erro no Servidor: ${response.status}`);
       }
 
       const data = await response.json();
@@ -137,14 +125,11 @@ export default function App() {
     };
 
     try {
-      if (scriptUrl) {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          mode: 'no-cors', // Common for Google Apps Script
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      }
+      await fetch('/api/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
       // Construct WhatsApp message
       const itemsList = chosenItems.map(item => `• Nº ${item.numero} (Fralda ${item.fralda} + ${item.mimo})`).join('\n');
@@ -277,7 +262,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • Feito com amor • v2.4</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v3.2 (Ponte Ativa)</p>
       </footer>
     </div>
   );
