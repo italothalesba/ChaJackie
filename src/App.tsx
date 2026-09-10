@@ -263,7 +263,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v3.8 (Cloud Run Fix)</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v3.9 (Robust Proxy)</p>
       </footer>
     </div>
   );
