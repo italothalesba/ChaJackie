@@ -126,11 +126,18 @@ export default function App() {
     };
 
     try {
-      await fetch('/api/proxy', {
+      setIsSubmitting(true);
+      const response = await fetch('/api/proxy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || (result.raw && result.raw.includes('Erro'))) {
+        throw new Error(result.details || result.raw || 'A planilha recusou a reserva.');
+      }
 
       // Construct WhatsApp message
       const itemsList = chosenItems.map(item => `• Nº ${item.numero} (Fralda ${item.fralda} + ${item.mimo})`).join('\n');
@@ -138,15 +145,15 @@ export default function App() {
         ? `Total: R$ ${totalValue.toFixed(2)}\nFavor enviar a chave PIX!`
         : `Vou entregar os itens pessoalmente!`;
 
-      const message = `Ola! Estou reservando os numeros para o Cha Rifa do Iroh Thales!\n\n` +
+      const message = `Olá! Estou reservando os números para o Chá Rifa do Iroh Thales!\n\n` +
         `Dados:\n` +
         `Nome: ${userData.nome}\n` +
-        `Endereco: ${userData.endereco}\n` +
+        `Endereço: ${userData.endereco}\n` +
         `Pagamento: ${userData.formaPagamento}\n\n` +
         `Escolhas:\n${itemsList}\n\n` +
         `${paymentMsg}`;
 
-      // Open WhatsApp - Using wa.me with window.open in a new tab
+      // Open WhatsApp
       const whatsappNumber = '5588981112005';
       const encodedMessage = encodeURIComponent(message);
       const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
@@ -154,14 +161,14 @@ export default function App() {
       setWhatsappUrl(url);
       setIsSuccess(true);
       
-      // Update local state and clear selection
+      // ONLY update local state if server confirmed
       setNumbers(prev => prev.map(n => 
         selectedNumbers.includes(n.numero) ? { ...n, status: 'Reservado', nome: userData.nome } : n
       ));
       setSelectedNumbers([]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao enviar reserva:', error);
-      alert('Houve um erro ao processar sua reserva. Tente novamente ou entre em contato via WhatsApp.');
+      alert(`Erro na Planilha: ${error.message}\n\nVerifique se o Script do Google está implantado corretamente como "Qualquer pessoa".`);
     } finally {
       setIsSubmitting(false);
     }
@@ -263,7 +270,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v3.9 (Robust Proxy)</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v4.0 (Validação Real)</p>
       </footer>
     </div>
   );
