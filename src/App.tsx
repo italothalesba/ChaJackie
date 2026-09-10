@@ -270,7 +270,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v4.0 (Validação Real)</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v4.1 (ID Corrigido)</p>
       </footer>
     </div>
   );
