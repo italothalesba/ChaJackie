@@ -140,7 +140,10 @@ export default function App() {
       }
 
       // Construct WhatsApp message
-      const itemsList = chosenItems.map(item => `• Nº ${item.numero} (Fralda ${item.fralda} + ${item.mimo})`).join('\n');
+      const itemsList = chosenItems.map(item => {
+        const mimoPart = item.mimo ? ` + ${item.mimo}` : '';
+        return `• Nº ${item.numero} (Fralda ${item.fralda}${mimoPart})`;
+      }).join('\n');
       const paymentMsg = userData.formaPagamento === 'PIX' 
         ? `Total: R$ ${totalValue.toFixed(2)}\nFavor enviar a chave PIX!`
         : `Vou entregar os itens pessoalmente!`;

@@ -23,7 +23,7 @@ export const generateInitialNumbers = (): RaffleNumber[] => {
     // Fralda G (31 a 50) - R$ 70
     else {
       fralda = 'G';
-      mimo = 'Fralda G';
+      mimo = '';
     }
 
     numbers.push({

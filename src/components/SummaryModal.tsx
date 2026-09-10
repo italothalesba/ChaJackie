@@ -137,7 +137,9 @@ export const SummaryModal = ({
                             </div>
                             <span className="text-brand-brown-dark font-sans font-medium">Fralda Tam. {item.fralda}</span>
                           </div>
-                          <p className="text-xs text-brand-brown-dark/60 font-sans italic mt-1 ml-10">Mimo: {item.mimo}</p>
+                          {item.mimo && (
+                            <p className="text-xs text-brand-brown-dark/60 font-sans italic mt-1 ml-10">Mimo: {item.mimo}</p>
+                          )}
                         </div>
                         <CheckCircle2 className="text-brand-sage" size={20} />
                       </div>
