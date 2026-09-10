@@ -191,40 +191,17 @@ export default function App() {
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
             </div>
             <div className="relative z-10 pr-8">
-              <button 
-                onClick={() => setSyncError(null)}
-                className="absolute -top-1 -right-1 p-1.5 hover:bg-amber-100 rounded-lg transition-colors text-amber-900/40 hover:text-amber-900"
-                title="Fechar aviso"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-              </button>
-              <p className="font-bold text-base mb-1">Problema de Sincronização</p>
+              <p className="font-bold text-base mb-1">Aviso</p>
               <p className="opacity-90 leading-relaxed text-sm">
-                {syncError}
+                Estamos com uma instabilidade momentânea na conexão. Por favor, tente recarregar a página ou tente novamente em alguns instantes.
               </p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4">
                 <button 
                   onClick={() => fetchData()}
-                  className="bg-amber-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-amber-950 transition-colors"
+                  className="bg-amber-900 text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-amber-950 transition-colors shadow-lg shadow-amber-900/20"
                 >
-                  Tentar Reconectar
+                  Tentar Novamente
                 </button>
-                <button 
-                  onClick={handleOpenScript}
-                  className="bg-white border border-amber-200 text-amber-900 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-amber-100 transition-colors"
-                >
-                  Testar Link da Planilha
-                </button>
-                <a 
-                  href="#" 
-                  className="text-amber-900 text-xs font-bold hover:underline flex items-center gap-1 pt-1.5"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Siga estes passos EXATAMENTE:\n\n1. No Google Sheets: Extensões > Apps Script\n2. Clique em Implantar > Gerenciar Implantações\n3. Clique no Lápis (Editar)\n4. Mude "Quem tem acesso" para "Qualquer Pessoa" (Anyone)\n5. MUITO IMPORTANTE: Em "Configuração", selecione "Nova Versão"\n6. Clique em Implantar\n7. Copie a nova URL e use-a no seu arquivo .env');
-                  }}
-                >
-                  Ver Passo-a-passo →
-                </a>
               </div>
             </div>
           </div>
@@ -270,7 +247,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v4.1 (ID Corrigido)</p>
+        <p>© 2026 Chá Rifa do Iroh Thales • Feito com carinho</p>
       </footer>
     </div>
   );
