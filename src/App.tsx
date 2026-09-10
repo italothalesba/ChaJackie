@@ -36,7 +36,7 @@ export default function App() {
     
     const scriptUrl = isInvalidEnv ? GAS_URL : envUrl;
     
-    console.log('Tentando conectar com:', scriptUrl);
+    // console.log('Tentando conectar com:', scriptUrl);
     
     if (!scriptUrl) {
       setSyncError('Configuração Pendente: O link da sua planilha não foi detectado.');
@@ -263,7 +263,7 @@ export default function App() {
       />
 
       <footer className="text-center py-12 px-6 text-brand-brown-dark/40 font-sans text-xs">
-        <p>© 2026 Chá Rifa Iroh Thales • v3.6 (Infra Vercel)</p>
+        <p>© 2026 Chá Rifa Iroh Thales • v3.7 (Vercel Functions)</p>
       </footer>
     </div>
   );
